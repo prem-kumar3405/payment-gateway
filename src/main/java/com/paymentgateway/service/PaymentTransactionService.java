@@ -5,6 +5,7 @@ import com.paymentgateway.entity.PaymentTransaction;
 import com.paymentgateway.enums.TransactionStatus;
 import com.paymentgateway.repository.PaymentTransactionRepository;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -31,6 +32,10 @@ public class PaymentTransactionService {
                 .build();
 
         return paymentTransactionRepository.save(transaction);
+    }
+    public List<PaymentTransaction> getTransactionsByPaymentId(Long paymentId) {
+
+        return paymentTransactionRepository.findByPaymentId(paymentId);
     }
 
     private String generateTransactionReference() {
