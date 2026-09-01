@@ -83,6 +83,12 @@ public class PaymentService {
 
         return paymentRepository.save(payment);
     }
+    public Payment getPaymentByReference(String paymentReference) {
+
+        return paymentRepository.findByPaymentReference(paymentReference)
+                .orElseThrow(() ->
+                        new PaymentNotFoundException("Payment not found"));
+    }
 
     private String generatePaymentReference() {
         return "PAY_" + UUID.randomUUID();
