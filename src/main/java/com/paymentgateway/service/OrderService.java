@@ -8,6 +8,8 @@ import com.paymentgateway.enums.OrderStatus;
 import com.paymentgateway.repository.CustomerRepository;
 import com.paymentgateway.repository.MerchantRepository;
 import com.paymentgateway.repository.OrderRepository;
+import com.paymentgateway.exception.CustomerNotFoundException;
+import com.paymentgateway.exception.MerchantNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -33,11 +35,11 @@ public class OrderService {
 
         Merchant merchant = merchantRepository.findById(request.merchantId())
                 .orElseThrow(() ->
-                        new IllegalArgumentException("Merchant not found"));
+                        new MerchantNotFoundException("Merchant not found"));
 
         Customer customer = customerRepository.findById(request.customerId())
                 .orElseThrow(() ->
-                        new IllegalArgumentException("Customer not found"));
+                        new CustomerNotFoundException("Customer not found"));
 
         Order order = Order.builder()
                 .merchant(merchant)
