@@ -40,7 +40,7 @@ public class Payment {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PaymentStatus  paymentStatus;
+    private PaymentStatus  status;
 
     @Column(name = "created_at",nullable = false)
     private LocalDateTime createdAt;
