@@ -1,6 +1,6 @@
 package com.paymentgateway.enums;
 
-public enum ApplicationStatus {
+public enum PaymentStatus {
     CREATED,
     PENDING,
     PROCESSING,
