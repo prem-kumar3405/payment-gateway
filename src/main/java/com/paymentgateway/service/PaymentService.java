@@ -3,6 +3,7 @@ package com.paymentgateway.service;
 import com.paymentgateway.dto.CreatePaymentRequest;
 import com.paymentgateway.entity.Order;
 import com.paymentgateway.entity.Payment;
+import com.paymentgateway.enums.TransactionStatus;
 import com.paymentgateway.exception.PaymentNotFoundException;
 import com.paymentgateway.exception.PaymentNotProcessableException;
 import com.paymentgateway.repository.OrderRepository;
@@ -107,8 +108,18 @@ public class PaymentService {
 
         if (success) {
             payment.setStatus(PaymentStatus.SUCCESS);
+
+            paymentTransactionService.updateLatestTransactionStatus(
+                    paymentId,
+                    TransactionStatus.SUCCESS
+            );
         } else {
             payment.setStatus(PaymentStatus.FAILED);
+
+            paymentTransactionService.updateLatestTransactionStatus(
+                    paymentId,
+                    TransactionStatus.FAILED
+            );
         }
 
         payment.setUpdatedAt(LocalDateTime.now());
