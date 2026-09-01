@@ -4,6 +4,7 @@ import com.paymentgateway.dto.CreatePaymentRequest;
 import com.paymentgateway.entity.Order;
 import com.paymentgateway.entity.Payment;
 import com.paymentgateway.exception.PaymentNotFoundException;
+import com.paymentgateway.exception.PaymentNotProcessableException;
 import com.paymentgateway.repository.OrderRepository;
 import com.paymentgateway.repository.PaymentRepository;
 import com.paymentgateway.enums.PaymentStatus;
@@ -62,6 +63,25 @@ public class PaymentService {
         return paymentRepository.findById(paymentId)
                 .orElseThrow(() ->
                         new PaymentNotFoundException("Payment not found"));
+    }
+    @Transactional
+    public Payment processPayment(Long paymentId) {
+
+        Payment payment = paymentRepository.findById(paymentId)
+                .orElseThrow(() ->
+                        new PaymentNotFoundException("Payment not found"));
+
+        if (payment.getStatus() != PaymentStatus.CREATED) {
+            throw new PaymentNotProcessableException(
+                    "Payment cannot be processed from status: "
+                            + payment.getStatus()
+            );
+        }
+
+        payment.setStatus(PaymentStatus.PROCESSING);
+        payment.setUpdatedAt(LocalDateTime.now());
+
+        return paymentRepository.save(payment);
     }
 
     private String generatePaymentReference() {
