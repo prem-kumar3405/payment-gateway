@@ -3,6 +3,7 @@ package com.paymentgateway.service;
 import com.paymentgateway.entity.Payment;
 import com.paymentgateway.entity.PaymentTransaction;
 import com.paymentgateway.enums.TransactionStatus;
+import com.paymentgateway.exception.PaymentTransactionNotFoundException;
 import com.paymentgateway.repository.PaymentTransactionRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -42,7 +43,7 @@ public class PaymentTransactionService {
         return paymentTransactionRepository
                 .findFirstByPaymentIdOrderByCreatedAtDesc(paymentId)
                 .orElseThrow(() ->
-                        new IllegalArgumentException("Payment transaction not found"));
+                        new PaymentTransactionNotFoundException("Payment transaction not found"));
     }
 
     private String generateTransactionReference() {
