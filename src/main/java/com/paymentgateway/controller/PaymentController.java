@@ -41,4 +41,24 @@ public class PaymentController {
                 .status(HttpStatus.CREATED)
                 .body(response);
     }
+    @GetMapping("/{paymentId}")
+    public ResponseEntity<PaymentResponse> getPayment(
+            @PathVariable Long paymentId) {
+
+        Payment payment = paymentService.getPaymentById(paymentId);
+
+        PaymentResponse response = new PaymentResponse(
+                payment.getId(),
+                payment.getPaymentReference(),
+                payment.getOrder().getId(),
+                payment.getAmount(),
+                payment.getCurrency(),
+                payment.getPaymentMethod(),
+                payment.getStatus(),
+                payment.getCreatedAt(),
+                payment.getUpdatedAt()
+        );
+
+        return ResponseEntity.ok(response);
+    }
 }
