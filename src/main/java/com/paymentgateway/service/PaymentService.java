@@ -7,6 +7,7 @@ import com.paymentgateway.repository.OrderRepository;
 import com.paymentgateway.repository.PaymentRepository;
 import com.paymentgateway.enums.PaymentStatus;
 import org.springframework.stereotype.Service;
+import com.paymentgateway.exception.OrderNotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -29,7 +30,7 @@ public class PaymentService {
 
         Order order = orderRepository.findById(request.orderId())
                 .orElseThrow(() ->
-                        new IllegalArgumentException("Order not found"));
+                        new OrderNotFoundException("Order not found"));
 
         Payment payment = Payment.builder()
                 .paymentReference(generatePaymentReference())
