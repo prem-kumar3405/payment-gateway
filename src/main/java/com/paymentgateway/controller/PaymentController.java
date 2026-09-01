@@ -61,4 +61,24 @@ public class PaymentController {
 
         return ResponseEntity.ok(response);
     }
+    @PostMapping("/{paymentId}/process")
+    public ResponseEntity<PaymentResponse> processPayment(
+            @PathVariable Long paymentId) {
+
+        Payment payment = paymentService.processPayment(paymentId);
+
+        PaymentResponse response = new PaymentResponse(
+                payment.getId(),
+                payment.getPaymentReference(),
+                payment.getOrder().getId(),
+                payment.getAmount(),
+                payment.getCurrency(),
+                payment.getPaymentMethod(),
+                payment.getStatus(),
+                payment.getCreatedAt(),
+                payment.getUpdatedAt()
+        );
+
+        return ResponseEntity.ok(response);
+    }
 }
