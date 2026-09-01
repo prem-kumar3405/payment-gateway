@@ -99,4 +99,16 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.CONFLICT)
                 .body(errorResponse);
     }
+    @ExceptionHandler(PaymentTransactionNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handlePaymentTransactionNotFound(
+            PaymentTransactionNotFoundException exception) {
+
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.NOT_FOUND.value(),
+                exception.getMessage(),
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
 }
