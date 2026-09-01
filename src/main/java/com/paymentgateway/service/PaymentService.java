@@ -56,6 +56,12 @@ public class PaymentService {
 
         return savedPayment;
     }
+    public Payment getPaymentById(Long paymentId) {
+
+        return paymentRepository.findById(paymentId)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Payment not found"));
+    }
 
     private String generatePaymentReference() {
         return "PAY_" + UUID.randomUUID();
