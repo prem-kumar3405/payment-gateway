@@ -6,9 +6,11 @@ import com.paymentgateway.entity.Payment;
 import com.paymentgateway.repository.OrderRepository;
 import com.paymentgateway.repository.PaymentRepository;
 import com.paymentgateway.enums.PaymentStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 import com.paymentgateway.exception.OrderNotFoundException;
 import com.paymentgateway.entity.PaymentTransaction;
+
 
 
 import java.time.LocalDateTime;
@@ -30,6 +32,7 @@ public class PaymentService {
         this.paymentTransactionService = paymentTransactionService;
     }
 
+    @Transactional
     public Payment createPayment(CreatePaymentRequest request) {
 
         Order order = orderRepository.findById(request.orderId())
