@@ -8,6 +8,8 @@ import com.paymentgateway.repository.PaymentRepository;
 import com.paymentgateway.enums.PaymentStatus;
 import org.springframework.stereotype.Service;
 import com.paymentgateway.exception.OrderNotFoundException;
+import com.paymentgateway.entity.PaymentTransaction;
+
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -16,14 +18,16 @@ import java.util.UUID;
 public class PaymentService {
 
     private final PaymentRepository paymentRepository;
+    private final PaymentTransactionService paymentTransactionService;
     private final OrderRepository orderRepository;
 
     public PaymentService(
             PaymentRepository paymentRepository,
-            OrderRepository orderRepository) {
+            OrderRepository orderRepository,PaymentTransactionService paymentTransactionService) {
 
         this.paymentRepository = paymentRepository;
         this.orderRepository = orderRepository;
+        this.paymentTransactionService = paymentTransactionService;
     }
 
     public Payment createPayment(CreatePaymentRequest request) {
@@ -43,7 +47,11 @@ public class PaymentService {
                 .updatedAt(LocalDateTime.now())
                 .build();
 
-        return paymentRepository.save(payment);
+        Payment savedPayment = paymentRepository.save(payment);
+
+        paymentTransactionService.createTransaction(savedPayment);
+
+        return savedPayment;
     }
 
     private String generatePaymentReference() {
