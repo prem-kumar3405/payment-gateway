@@ -1,11 +1,13 @@
 package com.paymentgateway.entity;
 
 import com.paymentgateway.enums.PaymentMethod;
+import com.paymentgateway.enums.PaymentStatus;
 import jakarta.persistence.*;
 import jakarta.persistence.criteria.Order;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "payments")
@@ -37,6 +39,14 @@ public class Payment {
     @Column(name = "payment_method", nullable = false)
     private PaymentMethod paymentMethod;
 
-    private Paymen
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PaymentStatus  paymentStatus;
+
+    @Column(name = "created_at",nullable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at",nullable = false)
+    private LocalDateTime updatedAt;
 
 }
