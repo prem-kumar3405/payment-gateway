@@ -89,6 +89,32 @@ public class PaymentService {
                 .orElseThrow(() ->
                         new PaymentNotFoundException("Payment not found"));
     }
+    @Transactional
+    public Payment completePayment(
+            Long paymentId,
+            boolean success) {
+
+        Payment payment = paymentRepository.findById(paymentId)
+                .orElseThrow(() ->
+                        new PaymentNotFoundException("Payment not found"));
+
+        if (payment.getStatus() != PaymentStatus.PROCESSING) {
+            throw new PaymentNotProcessableException(
+                    "Payment cannot be completed from status: "
+                            + payment.getStatus()
+            );
+        }
+
+        if (success) {
+            payment.setStatus(PaymentStatus.SUCCESS);
+        } else {
+            payment.setStatus(PaymentStatus.FAILED);
+        }
+
+        payment.setUpdatedAt(LocalDateTime.now());
+
+        return paymentRepository.save(payment);
+    }
 
     private String generatePaymentReference() {
         return "PAY_" + UUID.randomUUID();
