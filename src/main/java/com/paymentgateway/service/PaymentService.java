@@ -3,6 +3,7 @@ package com.paymentgateway.service;
 import com.paymentgateway.dto.CreatePaymentRequest;
 import com.paymentgateway.entity.Order;
 import com.paymentgateway.entity.Payment;
+import com.paymentgateway.exception.PaymentNotFoundException;
 import com.paymentgateway.repository.OrderRepository;
 import com.paymentgateway.repository.PaymentRepository;
 import com.paymentgateway.enums.PaymentStatus;
@@ -60,7 +61,7 @@ public class PaymentService {
 
         return paymentRepository.findById(paymentId)
                 .orElseThrow(() ->
-                        new IllegalArgumentException("Payment not found"));
+                        new PaymentNotFoundException("Payment not found"));
     }
 
     private String generatePaymentReference() {
