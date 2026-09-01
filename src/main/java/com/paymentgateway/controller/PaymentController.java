@@ -1,6 +1,7 @@
 package com.paymentgateway.controller;
 
 import com.paymentgateway.dto.CreatePaymentRequest;
+import com.paymentgateway.dto.CompletePaymentRequest;
 import com.paymentgateway.dto.PaymentResponse;
 import com.paymentgateway.entity.Payment;
 import com.paymentgateway.service.PaymentService;
@@ -66,6 +67,30 @@ public class PaymentController {
             @PathVariable Long paymentId) {
 
         Payment payment = paymentService.processPayment(paymentId);
+
+        PaymentResponse response = new PaymentResponse(
+                payment.getId(),
+                payment.getPaymentReference(),
+                payment.getOrder().getId(),
+                payment.getAmount(),
+                payment.getCurrency(),
+                payment.getPaymentMethod(),
+                payment.getStatus(),
+                payment.getCreatedAt(),
+                payment.getUpdatedAt()
+        );
+
+        return ResponseEntity.ok(response);
+    }
+    @PostMapping("/{paymentId}/complete")
+    public ResponseEntity<PaymentResponse> completePayment(
+            @PathVariable Long paymentId,
+            @Valid @RequestBody CompletePaymentRequest request) {
+
+        Payment payment = paymentService.completePayment(
+                paymentId,
+                request.success()
+        );
 
         PaymentResponse response = new PaymentResponse(
                 payment.getId(),
