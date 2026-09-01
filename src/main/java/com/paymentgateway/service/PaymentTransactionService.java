@@ -37,6 +37,13 @@ public class PaymentTransactionService {
 
         return paymentTransactionRepository.findByPaymentId(paymentId);
     }
+    public PaymentTransaction getLatestTransactionByPaymentId(Long paymentId) {
+
+        return paymentTransactionRepository
+                .findFirstByPaymentIdOrderByCreatedAtDesc(paymentId)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Payment transaction not found"));
+    }
 
     private String generateTransactionReference() {
         return "TXN_" + UUID.randomUUID();
