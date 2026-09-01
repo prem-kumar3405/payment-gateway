@@ -111,6 +111,8 @@ public class PaymentService {
 
         if (success) {
             payment.setStatus(PaymentStatus.SUCCESS);
+            payment.getOrder().setStatus(OrderStatus.PAID);
+            orderRepository.save(payment.getOrder());
 
             paymentTransactionService.updateLatestTransactionStatus(
                     paymentId,
