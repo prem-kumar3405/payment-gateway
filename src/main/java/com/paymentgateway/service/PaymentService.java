@@ -3,6 +3,7 @@ package com.paymentgateway.service;
 import com.paymentgateway.dto.CreatePaymentRequest;
 import com.paymentgateway.entity.Order;
 import com.paymentgateway.entity.Payment;
+import com.paymentgateway.enums.OrderStatus;
 import com.paymentgateway.enums.TransactionStatus;
 import com.paymentgateway.exception.PaymentNotFoundException;
 import com.paymentgateway.exception.PaymentNotProcessableException;
@@ -41,6 +42,8 @@ public class PaymentService {
         Order order = orderRepository.findById(request.orderId())
                 .orElseThrow(() ->
                         new OrderNotFoundException("Order not found"));
+        order.setStatus(OrderStatus.PAYMENT_PENDING);
+        orderRepository.save(order);
 
         Payment payment = Payment.builder()
                 .paymentReference(generatePaymentReference())
