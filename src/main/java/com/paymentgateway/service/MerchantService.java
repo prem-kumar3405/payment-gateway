@@ -3,6 +3,7 @@ package com.paymentgateway.service;
 import com.paymentgateway.dto.CreateMerchantRequest;
 import com.paymentgateway.dto.MerchantResponse;
 import com.paymentgateway.entity.Merchant;
+import com.paymentgateway.exception.MerchantAlreadyExistsException;
 import com.paymentgateway.repository.MerchantRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,9 +20,12 @@ public class MerchantService {
 
     public MerchantResponse createMerchant(CreateMerchantRequest request) {
 
-        if(merchantRepository.findByEmail(request.email()).isPresent()){
-            throw  new IllegalArgumentException("Merchant email already exists");
+        if (merchantRepository.findByEmail(request.email()).isPresent()) {
+            throw new MerchantAlreadyExistsException(
+                    "Merchant email already exists"
+            );
         }
+
 
         Merchant merchant = Merchant.builder()
                 .name(request.name())
