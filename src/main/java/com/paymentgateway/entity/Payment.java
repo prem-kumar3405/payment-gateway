@@ -3,7 +3,6 @@ package com.paymentgateway.entity;
 import com.paymentgateway.enums.PaymentMethod;
 import com.paymentgateway.enums.PaymentStatus;
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.Order;
 import lombok.*;
 
 import java.math.BigDecimal;

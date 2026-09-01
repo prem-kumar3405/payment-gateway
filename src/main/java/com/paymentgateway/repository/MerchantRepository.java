@@ -11,4 +11,6 @@ public interface MerchantRepository
     Optional<Merchant> findByEmail(String email);
 
     Optional<Merchant> findByApiKey(String apiKey);
+
+    Merchant save(Merchant merchant);
 }
