@@ -6,6 +6,7 @@ import com.paymentgateway.enums.TransactionStatus;
 import com.paymentgateway.exception.PaymentTransactionNotFoundException;
 import com.paymentgateway.repository.PaymentTransactionRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import java.time.LocalDateTime;
@@ -45,7 +46,18 @@ public class PaymentTransactionService {
                 .orElseThrow(() ->
                         new PaymentTransactionNotFoundException("Payment transaction not found"));
     }
+    @Transactional
+    public PaymentTransaction updateLatestTransactionStatus(
+            Long paymentId,
+            TransactionStatus status) {
 
+        PaymentTransaction transaction =
+                getLatestTransactionByPaymentId(paymentId);
+
+        transaction.setStatus(status);
+
+        return paymentTransactionRepository.save(transaction);
+    }
     private String generateTransactionReference() {
         return "TXN_" + UUID.randomUUID();
     }
